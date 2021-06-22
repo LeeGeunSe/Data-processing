@@ -51,8 +51,8 @@ for i in range(0,len(file_list)):
     file2 = file1[file1['파주기(sec)']>0]
     #CASE04 주기 16이상
     file3 = file2[file2['파주기(sec)']<16]
+    #결측된 날짜들 NaN값으로 채워주는 작업 그림그릴때 중요 (결측구간이 이어져서 그려질 수 있음)
     file3.index=pd.DatetimeIndex(file3['일시']) #resample을 위해 index를 시간으로 바꿔줌
     file=file3.drop(['일시'],axis=1) #이제 필요없으니 제거
-    #결측된 날짜들 NaN값으로 채워주는 작업 그림그릴때 중요
     file=file.resample('30T').first() #30분간격으로 데이터 resample해주는 작업
     file.to_excel('F:/기상청QC데이터/'+file_list[i][:-5]+'.xlsx')
