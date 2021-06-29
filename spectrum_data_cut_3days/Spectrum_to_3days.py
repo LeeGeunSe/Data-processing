@@ -11,16 +11,17 @@ from pandas import Series, DataFrame
 import os
 import pandas as pd
 
-user_name = 'jdheee'
-mid_sector=['MJ_01']
+user_name = 'kimhj'
+mid_sector=['MS_02','MS_03','MW_04','ME_01']
 buoy_name = pd.read_excel('/home/'+user_name+'/SPECTRUM_3days/인근 부이 정리.xlsx', header=None)
 
 for i in range(len(mid_sector)):
+    os.mkdir('/home/'+user_name+'/SPECTRUM_3days/'+mid_sector[i])
     path ='/home/'+user_name+'/TY_M/'+mid_sector[i]+'/CAL'
     event_list = os.listdir(path)
     for j in range(len(event_list)):
         #새롭게 저장하는 폴더 만들어주기
-        os.mkdir('/home/'+user_name+'/SPECTRUM_3days/'+event_list[j])        
+        os.mkdir('/home/'+user_name+'/SPECTRUM_3days/'+mid_sector[i]+'/'+event_list[j])        
         #태풍/비태풍 폴더에 가서 항 이름이 포함된 파일 list만 추출
         port_list = os.listdir(path+'/'+event_list[j])
         port_list = [file for file in port_list if file.endswith(event_list[j]+'.dat')]
@@ -42,7 +43,7 @@ for i in range(len(mid_sector)):
             #new = open('F:/동남권역 스펙트럼 3일정리/new.dat','w')
                 
             f = open(path+'/'+event_list[j]+'/'+port_list[k])
-            new = open('/home/'+user_name+'/SPECTRUM_3days/'+event_list[j]+'/'+port_list[k][:-4]+'_3days.dat','w')
+            new = open('/home/'+user_name+'/SPECTRUM_3days/'+mid_sector[i]+'/'+event_list[j]+'/'+port_list[k][:-4]+'_3days.dat','w')
             a=f.readline()
             new.write(a)
             while a!='QUANT\n':
@@ -66,8 +67,8 @@ for i in range(len(mid_sector)):
                 new.write
                 a= f.readline()
             new.close()
-                
-                
-                
-                
-                
+            
+            
+            
+            
+            
