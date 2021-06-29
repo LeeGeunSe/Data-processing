@@ -49,7 +49,7 @@ for i in range(len(mid_sector)):
                 a=f.readline()
                 new.write(a) 
             #헤더는 모두 복사 
-            for j in range(4):
+            for w in range(4):
                 a=f.readline()
                 new.write(a)
             #날짜로 구별
