@@ -11,8 +11,8 @@ from pandas import Series, DataFrame
 import os
 import pandas as pd
 
-user_name = 'kimhj'
-mid_sector=['MS_02','MS_03','MW_04','ME_01']
+user_name = 'jdheee'
+mid_sector=['MJ_01']
 buoy_name = pd.read_excel('/home/'+user_name+'/SPECTRUM_3days/인근 부이 정리.xlsx', header=None)
 
 for i in range(len(mid_sector)):
@@ -38,6 +38,15 @@ for i in range(len(mid_sector)):
                     port_data = list(port_data_o[0][l].split())
             max_time = datetime.datetime.strptime(port_data[0],'%Y%m%d.%H%M%S')
             
+            #여기서 max값이 너무 뒤에 있으면 맨뒤부터 3일, 너무 앞에 있으면 맨앞부터 3일 코드 만들어주기
+            file_start_time = list(port_data_o[0][0].split())
+            file_start_time = datetime.datetime.strptime(file_start_time[0],'%Y%m%d.%H%M%S')
+            if max_time-datetime.timedelta(days=2) < file_start_time:
+                max_time = file_start_time+datetime.timedelta(days=2)
+            file_end_time = list(port_data_o[0][len(port_data_o)-1].split())
+            file_end_time = datetime.datetime.strptime(file_end_time[0],'%Y%m%d.%H%M%S')
+            if max_time+datetime.timedelta(days=1) > file_end_time:
+                max_time = file_end_time-datetime.timedelta(hours=23)
             #여기부터 max 타임을 가지고 3일로 잘라주어 새로 저장하는 작업
             #f = open('F:/동남권역 스펙트럼 3일정리/SUNGSANPO_0014_SAOMAI.dat')
             #new = open('F:/동남권역 스펙트럼 3일정리/new.dat','w')
@@ -55,20 +64,17 @@ for i in range(len(mid_sector)):
                 new.write(a)
             #날짜로 구별
             start_time = max_time -datetime.timedelta(days=2)
-            #start_time 기준 10분간격으로  max_time을 넘지 않는 시간을 찾는다
-            while start_time <= max_time-datetime.timedelta(hours=48):
-                start_time = start_time + datetime.timedelta(minutes=10)
             #새로운 start_time 전까지의 시간은 모두 패스
             while a[:15]!=start_time.strftime('%Y%m%d.%H%M%S'):
                 a= f.readline()
             #지금부터 3일 뒤까지 새로운 파일에 쓰기
-            end_time=start_time+datetime.timedelta(days=3,minutes=10)
+            end_time=start_time+datetime.timedelta(days=3)
             while a[:15]!=end_time.strftime('%Y%m%d.%H%M%S'):
-                new.write
+                new.write(a)
                 a= f.readline()
+                if not a: break #라인 없을때는 break
             new.close()
-            
-            
-            
-            
-            
+                
+                
+                
+                
